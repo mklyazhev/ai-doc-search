@@ -23,7 +23,7 @@ def get_env(key: str, default=None) -> str:
 
 
 class Settings:
-    TELEGRAM_TOKEN = get_env("BOT_TOKEN")
+    BOT_TOKEN = get_env("BOT_TOKEN")
     YANDEX_API_KEY = get_env("YANDEX_API_KEY")
     YANDEX_FOLDER_ID = get_env("YANDEX_FOLDER_ID")
 
