@@ -1,8 +1,11 @@
 import json
+import logging
 from typing import List, Dict
 
 from src.core.vector_index import VectorIndex
 from src.common.config import get_settings
+
+logger = logging.getLogger(__name__)
 
 
 class DocumentStore:
@@ -15,7 +18,7 @@ class DocumentStore:
         with open(data_path, 'r', encoding='utf-8') as f:
             data = json.load(f)
         self.documents = data.get("documents", [])
-        print(f"Loaded {len(self.documents)} documents from {data_path}")
+        logger.info(f"Loaded {len(self.documents)} documents from {data_path}")
 
     def build_chunks(self, chunk_size: int = None, overlap: int = None) -> None:
         if chunk_size is None:
@@ -37,7 +40,7 @@ class DocumentStore:
 
         texts = [c["chunk"] for c in self.chunks]
         self.index.build(texts)
-        print(f"Built {len(self.chunks)} chunks from {len(self.documents)} documents")
+        logger.info(f"Built {len(self.chunks)} chunks from {len(self.documents)} documents")
 
     @staticmethod
     def chunk_text(text: str, size: int, overlap: int = 0):
