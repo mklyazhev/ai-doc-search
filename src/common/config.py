@@ -1,0 +1,35 @@
+import os
+from dotenv import load_dotenv
+
+load_dotenv()
+
+
+def get_env(key: str, default=None) -> str:
+    value = os.getenv(key)
+
+    if not value:
+        if not default:
+            raise ValueError("Environment variable {%s} is not set", key)
+        else:
+            return default
+
+    return value
+
+
+class Settings:
+    TELEGRAM_TOKEN = get_env("BOT_TOKEN")
+    YANDEX_API_KEY = get_env("YANDEX_API_KEY")
+    YANDEX_FOLDER_ID = get_env("YANDEX_FOLDER_ID")
+
+    DATA_PATH = get_env("DATA_PATH")
+
+    TOP_K = get_env("TOP_K", 5)
+    CHUNK_SIZE = get_env("CHUNK_SIZE", 300)
+    CHUNK_OVERLAP = get_env("CHUNK_OVERLAP", 50)
+
+
+_settings = Settings()
+
+
+def get_settings():
+    return _settings
