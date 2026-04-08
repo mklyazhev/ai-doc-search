@@ -23,17 +23,13 @@ class OpenRouterClient:
         headers = {
             "Authorization": f"Bearer {get_settings().OPENROUTER_API_KEY}",
             "Content-Type": "application/json",
-            "HTTP-Referer": "http://localhost",  # можно поменять
-            "X-Title": "doc-search-bot"          # опционально
         }
 
         payload = {
             "model": f"{get_settings().MODEL_NAME}",
             "messages": [
                 {"role": "user", "content": prompt}
-            ],
-            "temperature": 0.3,
-            "max_tokens": 500
+            ]
         }
 
         response = requests.post(OPENROUTER_URL, headers=headers, json=payload)
