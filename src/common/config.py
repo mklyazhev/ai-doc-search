@@ -30,6 +30,9 @@ class Settings:
 
     DATA_PATH = get_env("DATA_PATH")
 
+    USE_PROXY = get_env("USE_PROXY", "false").lower() == "true"
+    PROXY_URL = get_env("PROXY_URL", "")
+
     TOP_K = get_env("TOP_K", 5)
     CHUNK_SIZE = get_env("CHUNK_SIZE", 300)
     CHUNK_OVERLAP = get_env("CHUNK_OVERLAP", 50)

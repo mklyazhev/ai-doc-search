@@ -15,16 +15,28 @@ def build_url(method: str) -> str:
     )
 
 
+def build_proxies():
+    settings = get_settings()
+
+    if not settings.USE_PROXY:
+        return None
+
+    if not settings.PROXY_URL:
+        raise ValueError("PROXY_URL is not set but USE_PROXY=true")
+
+    return {
+        "http": settings.PROXY_URL,
+        "https": settings.PROXY_URL,
+    }
+
+
 class TelegramBot:
     def __init__(self, ai_service):
         self.ai_service = ai_service
         self.offset = 0
 
         self.session = requests.Session()
-        self.session.proxies = {
-            "http": "http://127.0.0.1:10809",
-            "https": "http://127.0.0.1:10809",
-        }
+        self.session.proxies = build_proxies() or {}
 
         self.session.trust_env = False
 
