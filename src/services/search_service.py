@@ -7,6 +7,16 @@ class SearchService:
         self.store = store
 
     def handle(self, query: str):
-        indices = self.store.index.search(query, get_settings().TOP_K)
-        results = [self.store.chunks[i] for i in indices]
-        return results
+        results = self.store.index.search(
+            query,
+            get_settings().TOP_K
+        )
+
+        return [
+            {
+                "title": self.store.chunks[r["index"]]["title"],
+                "chunk": r["text"],
+                "score": r["score"]
+            }
+            for r in results
+        ]

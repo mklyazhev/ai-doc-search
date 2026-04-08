@@ -1,4 +1,4 @@
-YANDEX_GPT_URL = "https://llm.api.cloud.yandex.net/foundationModels/v1/completion"
+OPENROUTER_URL = "https://openrouter.ai/api/v1/chat/completions"
 TELEGRAM_API_BASE = "https://api.telegram.org/bot{token}/{method}"
 
 PROMPT_TEMPLATE = """

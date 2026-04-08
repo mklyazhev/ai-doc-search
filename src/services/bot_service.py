@@ -20,17 +20,46 @@ class TelegramBot:
         self.ai_service = ai_service
         self.offset = 0
 
+        self.session = requests.Session()
+        self.session.proxies = {
+            "http": "http://127.0.0.1:10809",
+            "https": "http://127.0.0.1:10809",
+        }
+
+        self.session.trust_env = False
+
     def get_updates(self):
         url = build_url("getUpdates")
-        params = {"offset": self.offset, "timeout": 30}
 
-        response = requests.get(url, params=params)
-        return response.json()
+        params = {
+            "offset": self.offset,
+            "timeout": 25
+        }
+
+        try:
+            response = self.session.get(
+                url,
+                params=params,
+                timeout=(10, 60)
+            )
+            response.raise_for_status()
+            return response.json()
+
+        except requests.exceptions.RequestException as e:
+            logger.error(f"get_updates error: {e}")
+            return {}
 
     def send_message(self, chat_id, text):
         url = build_url("sendMessage")
-        data = {"chat_id": chat_id, "text": text}
-        requests.post(url, json=data)
+
+        try:
+            self.session.post(
+                url,
+                json={"chat_id": chat_id, "text": text},
+                timeout=(5, 10)
+            )
+        except requests.exceptions.RequestException as e:
+            logger.error(f"send_message error: {e}")
 
     def run(self):
         logger.info("Bot started...")
@@ -51,7 +80,12 @@ class TelegramBot:
                 if not text:
                     continue
 
-                answer = self.ai_service.process_query(text)
+                try:
+                    answer = self.ai_service.process_query(text)
+                except Exception as e:
+                    logger.error(f"AI error: {e}")
+                    answer = "Ошибка обработки запроса"
+
                 self.send_message(chat_id, answer)
 
-            time.sleep(1)
+            time.sleep(0.3)

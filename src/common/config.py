@@ -24,8 +24,9 @@ def get_env(key: str, default=None) -> str:
 
 class Settings:
     BOT_TOKEN = get_env("BOT_TOKEN")
-    YANDEX_API_KEY = get_env("YANDEX_API_KEY")
-    YANDEX_FOLDER_ID = get_env("YANDEX_FOLDER_ID")
+
+    OPENROUTER_API_KEY = get_env("OPENROUTER_API_KEY")
+    MODEL_NAME = get_env("MODEL_NAME")
 
     DATA_PATH = get_env("DATA_PATH")
 

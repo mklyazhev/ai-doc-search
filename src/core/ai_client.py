@@ -2,7 +2,7 @@ import requests
 from typing import List, Dict
 
 from src.common.config import get_settings
-from src.common.constants import YANDEX_GPT_URL, PROMPT_TEMPLATE
+from src.common.constants import OPENROUTER_URL, PROMPT_TEMPLATE
 
 
 def build_context(chunks):
@@ -11,7 +11,7 @@ def build_context(chunks):
     )
 
 
-class YandexGPTClient:
+class OpenRouterClient:
     def generate_answer(self, query: str, context: List[Dict]) -> str:
         context_text = build_context(context)
 
@@ -21,21 +21,22 @@ class YandexGPTClient:
         )
 
         headers = {
-            "Authorization": f"Api-Key {get_settings().YANDEX_API_KEY}"
+            "Authorization": f"Bearer {get_settings().OPENROUTER_API_KEY}",
+            "Content-Type": "application/json",
+            "HTTP-Referer": "http://localhost",  # можно поменять
+            "X-Title": "doc-search-bot"          # опционально
         }
 
         payload = {
-            "modelUri": f"gpt://{get_settings().YANDEX_FOLDER_ID}/yandexgpt-lite",
-            "completionOptions": {
-                "temperature": 0.3,
-                "maxTokens": 500
-            },
+            "model": f"{get_settings().MODEL_NAME}",
             "messages": [
-                {"role": "user", "text": prompt}
-            ]
+                {"role": "user", "content": prompt}
+            ],
+            "temperature": 0.3,
+            "max_tokens": 500
         }
 
-        response = requests.post(YANDEX_GPT_URL, headers=headers, json=payload)
+        response = requests.post(OPENROUTER_URL, headers=headers, json=payload)
 
         if response.status_code != 200:
             return f"LLM error: {response.text}"
@@ -43,6 +44,6 @@ class YandexGPTClient:
         data = response.json()
 
         try:
-            return data["result"]["alternatives"][0]["message"]["text"]
+            return data["choices"][0]["message"]["content"]
         except Exception:
             return "Ошибка обработки ответа LLM"
