@@ -26,7 +26,7 @@ class OpenRouterClient:
         }
 
         payload = {
-            "model": f"{get_settings().MODEL_NAME}",
+            "model": f"{get_settings().LLM_MODEL_NAME}",
             "messages": [
                 {"role": "user", "content": prompt}
             ]

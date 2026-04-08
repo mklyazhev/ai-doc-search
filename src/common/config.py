@@ -26,7 +26,9 @@ class Settings:
     BOT_TOKEN = get_env("BOT_TOKEN")
 
     OPENROUTER_API_KEY = get_env("OPENROUTER_API_KEY")
-    MODEL_NAME = get_env("MODEL_NAME")
+    LLM_MODEL_NAME = get_env("LLM_MODEL_NAME")
+
+    EMBEDDING_MODEL_NAME = get_env("EMBEDDING_MODEL_NAME")
 
     DATA_PATH = get_env("DATA_PATH")
 
@@ -34,8 +36,8 @@ class Settings:
     PROXY_URL = get_env("PROXY_URL", "")
 
     TOP_K = get_env("TOP_K", 5)
-    CHUNK_SIZE = get_env("CHUNK_SIZE", 300)
-    CHUNK_OVERLAP = get_env("CHUNK_OVERLAP", 50)
+    CHUNK_SIZE = get_env("CHUNK_SIZE", 800)
+    CHUNK_OVERLAP = get_env("CHUNK_OVERLAP", 150)
 
 
 _settings = Settings()

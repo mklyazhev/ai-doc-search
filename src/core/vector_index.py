@@ -3,10 +3,12 @@ import numpy as np
 from sentence_transformers import SentenceTransformer
 from typing import List
 
+from src.common.config import get_settings
+
 
 class VectorIndex:
     def __init__(self):
-        self.model = SentenceTransformer("all-MiniLM-L6-v2")
+        self.model = SentenceTransformer(get_settings().EMBEDDING_MODEL_NAME)
         self.index = None
         self.texts: List[str] = []
 
